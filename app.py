@@ -225,6 +225,9 @@ def widget_for_feature(
 def main():
     st.set_page_config(page_title="Prediksi Diabetes", page_icon="🩺", layout="centered")
 
+    # 🔽 BARIS DEBUG (WAJIB ADA DI SINI)
+    st.warning("VERSI BARU AKTIF")
+
     st.title("🩺 Prediksi Diabetes")
     st.caption("Aplikasi Streamlit untuk deployment model dari notebook (LogReg vs RF).")
 
@@ -232,7 +235,6 @@ def main():
     with st.sidebar:
         st.subheader("Pengaturan")
         threshold = st.slider("Threshold klasifikasi", 0.05, 0.95, 0.50, 0.01)
-        
 
         st.markdown(
             "Tips:\n"
@@ -252,7 +254,7 @@ def main():
     # Input form
     st.subheader("Input Fitur")
     with st.form("input_form"):
-        inputs: Dict[str, Any] = {}
+        inputs = {}
         cols = st.columns(2)
         for i, feat in enumerate(expected):
             with cols[i % 2]:
@@ -283,20 +285,9 @@ def main():
         with st.expander("Lihat input (debug)"):
             st.json(inputs)
 
-        # Info model + interpretasi (opsional)
         info = build_model_info(model)
         with st.expander("Info Model (opsional)"):
             st.write("Estimator:", info.get("estimator", "Unknown"))
             st.write("Jumlah fitur input:", len(expected))
-            if "top_coef" in info:
-                st.write("Top koefisien (Logistic Regression):")
-                st.dataframe(info["top_coef"], use_container_width=True)
-            if "top_importance" in info:
-                st.write("Top feature importance (Random Forest):")
-                st.dataframe(info["top_importance"], use_container_width=True)
 
         st.info("Catatan: ini alat bantu prediksi berbasis ML untuk tujuan akademik, bukan diagnosis medis.")
-
-
-if __name__ == "__main__":
-    main()
